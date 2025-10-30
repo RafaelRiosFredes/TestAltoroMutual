@@ -21,7 +21,7 @@ public class DriverManager {
             options.addArguments("--remote-allow-origins=*");
 
             driver = new ChromeDriver(options);
-            System.out.println("🚀 Navegador iniciado correctamente (DriverManager)");
+            System.out.println(" Navegador iniciado correctamente (DriverManager)");
         }
         return driver;
     }
@@ -38,7 +38,7 @@ public class DriverManager {
 
             driver.quit();
             driver = null;
-            System.out.println("🧹 Navegador cerrado correctamente (DriverManager)");
+            System.out.println(" Navegador cerrado correctamente (DriverManager)");
         }
     }
 }
