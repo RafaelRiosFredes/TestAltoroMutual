@@ -26,9 +26,8 @@ public class LoginSteps {
         options.addArguments("--incognito");
         options.addArguments("--disable-popup-blocking");
         driver = new ChromeDriver(options);
-
         driver.get(url);
-        System.out.println("🌐 Página abierta: " + url);
+        System.out.println("Página abierta: " + url);
     }
 
     // =====================================================
@@ -48,15 +47,12 @@ public class LoginSteps {
     @When("el usuario ingresa en {string} el usuario {string} y en {string} la contraseña {string}")
     public void ingresarCredenciales(String userXpath, String usuario, String passXpath, String contrasena) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         WebElement userField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(userXpath)));
         userField.clear();
         userField.sendKeys(usuario);
-
         WebElement passField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(passXpath)));
         passField.clear();
         passField.sendKeys(contrasena);
-
         System.out.println("Credenciales ingresadas: " + usuario);
     }
 
@@ -82,18 +78,15 @@ public class LoginSteps {
     public void se_deberia_mostrar_el_campo_con_el_mensaje(String xpath, String mensajeEsperado) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement mensajeElemento = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-
         String texto = mensajeElemento.getText().trim();
         if (texto.isEmpty()) {
             texto = mensajeElemento.getAttribute("innerText").trim();
         }
-
         if (texto.contains(mensajeEsperado)) {
             System.out.println("El mensaje esperado se encontró correctamente: " + texto);
         } else {
             throw new AssertionError(" El texto no coincide. Esperado: " + mensajeEsperado + " | Obtenido: " + texto);
         }
-
         // Espera 5 segundos para visualizar el resultado antes de cerrar
         try {
             System.out.println(" Esperando 5 segundos antes de cerrar el navegador...");
@@ -101,7 +94,6 @@ public class LoginSteps {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
         driver.quit();
         System.out.println(" Navegador cerrado correctamente.");
     }
