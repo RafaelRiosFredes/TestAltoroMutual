@@ -24,14 +24,14 @@ public class OfertaTarjetaSteps {
         options.addArguments("--start-maximized", "--incognito", "--disable-popup-blocking");
         driver = new ChromeDriver(options);
         driver.get(url);
-        System.out.println("🧭 Navegador abierto en: " + url);
+        System.out.println("Navegador abierto en: " + url);
     }
 
     @Given("el usuario hace click en {string} para ir a login")
     public void clickIrALogin(String xpath) {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
-        System.out.println("➡️ Click en enlace de login.");
+        System.out.println("➡Click en enlace de login.");
     }
 
     @Given("escribe el usuario en {string} con {string}")
@@ -40,7 +40,7 @@ public class OfertaTarjetaSteps {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         user.clear();
         user.sendKeys(usuario);
-        System.out.println("📝 Usuario ingresado: " + usuario);
+        System.out.println("Usuario ingresado: " + usuario);
     }
 
     @Given("escribe la clave en {string} con {string}")
@@ -49,14 +49,14 @@ public class OfertaTarjetaSteps {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         pass.clear();
         pass.sendKeys(clave);
-        System.out.println("🔒 Clave ingresada.");
+        System.out.println("Clave ingresada.");
     }
 
     @Given("hace click en {string}")
     public void clickGenerico(String xpath) {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
-        System.out.println("✅ Click ejecutado: " + xpath);
+        System.out.println("Click ejecutado: " + xpath);
     }
 
     // ====== Escenarios (3.1 y 3.2) ======
@@ -90,14 +90,14 @@ public class OfertaTarjetaSteps {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         passConfirm.clear();
         passConfirm.sendKeys(clave);
-        System.out.println("🔐 Clave de confirmación ingresada.");
+        System.out.println("Clave de confirmación ingresada.");
     }
 
     @When("hace click en el botón de envío {string}")
     public void clickSubmit(String xpath) {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
-        System.out.println("📤 Click en el botón Submit.");
+        System.out.println("Click en el botón Submit.");
     }
 
     @Then("debería ver en {string} el texto {string}")
@@ -107,7 +107,7 @@ public class OfertaTarjetaSteps {
 
         String texto = msg.getText().trim();
         boolean coincide = texto.contains(esperado);
-        System.out.println("📣 Texto mostrado: " + texto);
+        System.out.println("Texto mostrado: " + texto);
         assertTrue(coincide, "El texto no coincide.\nEsperado: " + esperado + "\nObtenido: " + texto);
 
         try {
@@ -116,6 +116,6 @@ public class OfertaTarjetaSteps {
             Thread.currentThread().interrupt();
         }
         driver.quit();
-        System.out.println("🧹 Navegador cerrado correctamente.");
+        System.out.println("Navegador cerrado correctamente.");
     }
 }
