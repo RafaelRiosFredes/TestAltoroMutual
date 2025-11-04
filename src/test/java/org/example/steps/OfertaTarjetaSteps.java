@@ -16,7 +16,7 @@ public class OfertaTarjetaSteps {
 
     WebDriver driver;
 
-    // ====== Background ======
+    // ====== Background: abrir navegador y loguearse ======
     @Given("el navegador está abierto en {string}")
     public void abrirNavegadorEn(String url) {
         WebDriverManager.chromedriver().setup();
@@ -60,11 +60,28 @@ public class OfertaTarjetaSteps {
     }
 
     // ====== Escenarios (3.1 y 3.2) ======
+
     @When("hace click en el enlace {string}")
     public void clickEnlace(String xpath) {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
-        System.out.println("🟡 Click en 'Click here to apply'.");
+        // Cambiar a la pestaña del dashboard si el login abrió una nueva
+        String originalWindow = driver.getWindowHandle();
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        // Esperar y hacer click en el enlace "Here" (apply.jsp)
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebElement enlace = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+        enlace.click();
+        System.out.println("🟡 Click en enlace de aplicación de tarjeta.");
+
+        // Si el clic abre una nueva pestaña (raro, pero posible), cambiar también a ella
+        for (String windowHandle : driver.getWindowHandles()) {
+            driver.switchTo().window(windowHandle);
+        }
     }
 
     @When("escribe la clave de confirmación en {string} con {string}")
@@ -76,18 +93,28 @@ public class OfertaTarjetaSteps {
         System.out.println("🔐 Clave de confirmación ingresada.");
     }
 
+    @When("hace click en el botón de envío {string}")
+    public void clickSubmit(String xpath) {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath))).click();
+        System.out.println("📤 Click en el botón Submit.");
+    }
+
     @Then("debería ver en {string} el texto {string}")
     public void deberiaVerMensaje(String xpath, String esperado) {
-        WebElement msg = new WebDriverWait(driver, Duration.ofSeconds(10))
+        WebElement msg = new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 
-        // Validación contiene (algunas veces el sitio agrega espacios o saltos)
         String texto = msg.getText().trim();
         boolean coincide = texto.contains(esperado);
         System.out.println("📣 Texto mostrado: " + texto);
-        assertTrue(coincide, "El texto no coincide.\nEsperado (contiene): " + esperado + "\nObtenido: " + texto);
+        assertTrue(coincide, "El texto no coincide.\nEsperado: " + esperado + "\nObtenido: " + texto);
 
-        try { Thread.sleep(3000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         driver.quit();
         System.out.println("🧹 Navegador cerrado correctamente.");
     }
