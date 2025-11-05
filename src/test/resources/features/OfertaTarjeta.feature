@@ -11,7 +11,7 @@ Feature: Recibir oferta de tarjeta de la página - Admin
     When hace click en el enlace "//a[@href='apply.jsp']"
     And escribe la clave de confirmación en "//input[@name='passwd']" con "admin"
     And hace click en el botón de envío "//input[@name='Submit' and @value='Submit']"
-    Then debería ver en "//body" el texto "Your new Altoro Mutual Gold VISA with a $10000 and 7.9% APR will be sent in the mail."
+    Then debería ver en "//span[@id='_ctl0__ctl0_Content_Main_lblMessage']" el texto "Your new Altoro Mutual Gold VISA with a $10000 and 7.9% APR will be sent in the mail."
 
 
   Scenario: Aceptar tarjeta pre aprobada con credenciales erróneas
