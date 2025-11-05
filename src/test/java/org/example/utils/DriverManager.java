@@ -7,8 +7,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverManager {
 
+ // Inicia el navegador solo una vez, aplica configuraciones, y luego lo cierra correctamente al final.
+
     private static WebDriver driver;
-    private static final int WAIT_BEFORE_CLOSE = 5000; // ⏳ Tiempo en milisegundos (5 segundos)
+    private static final int WAIT_BEFORE_CLOSE = 5000; // Tiempo en milisegundos (5 segundos)
 
     public static WebDriver getDriver() {
         if (driver == null) {

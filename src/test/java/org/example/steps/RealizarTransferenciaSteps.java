@@ -113,6 +113,7 @@ public class RealizarTransferenciaSteps {
         String texto = msg.getText().trim();
 
         assertTrue("Mensaje actual: [" + texto + "]", texto.contains(mensaje));
+        System.out.println(" Se visualiza correctamente la transferencia realizada");
     }
 
 

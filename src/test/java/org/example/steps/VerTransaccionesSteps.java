@@ -34,9 +34,7 @@ public class VerTransaccionesSteps {
         System.out.println(" Click en enlace de login (VerTransacciones).");
     }
 
-    // =====================================================
-    // Ingresar credenciales (RENOMBRADO para evitar duplicado)
-    // =====================================================
+
     @When("en VerTransacciones el usuario completa {string} con {string} y {string} con la contraseña {string}")
     public void ingresarCredencialesVerTransacciones(String userXpath, String usuario, String passXpath, String contrasena) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -45,18 +43,12 @@ public class VerTransaccionesSteps {
         System.out.println("Credenciales ingresadas (VerTransacciones).");
     }
 
-    // =====================================================
-    // Botón login (ya renombrado)
-    // =====================================================
     @When("presiona el botón de login en VerTransacciones {string}")
     public void clickBotonLoginVerTransacciones(String xpath) {
         driver.findElement(By.xpath(xpath)).click();
         System.out.println(" Click en botón Login (VerTransacciones).");
     }
 
-    // =====================================================
-    // Acceder a transacciones
-    // =====================================================
     @When("el usuario realiza click en {string} para acceder a la seccion de transacciones recientes")
     public void accederASeccionTransacciones(String xpath) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -65,9 +57,6 @@ public class VerTransaccionesSteps {
         System.out.println(" Click en 'View Recent Transactions'.");
     }
 
-    // =====================================================
-    // Validar que se muestre la tabla
-    // =====================================================
     @Then("Se deberia mostrar el campo {string} con el historial de transacciones")
     public void validarHistorial(String xpath) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

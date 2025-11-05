@@ -15,9 +15,9 @@ public class LoginSteps {
 
     static WebDriver driver;
 
-    // =====================================================
+
     // Inicialización del navegador
-    // =====================================================
+
     @Given("el navegador esta abierto en la pagina {string}")
     public void el_navegador_esta_abierto_en_la_pagina(String url) {
         WebDriverManager.chromedriver().setup();
@@ -30,9 +30,8 @@ public class LoginSteps {
         System.out.println("Página abierta: " + url);
     }
 
-    // =====================================================
-    // Paso 2: ir a login
-    // =====================================================
+    // Ir al login
+
     @Given("el usuario realiza click en {string} para dirigirse a la pagina de login")
     public void el_usuario_realiza_click_en_para_dirigirse_a_la_pagina_de_login(String xpath) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -41,9 +40,7 @@ public class LoginSteps {
         System.out.println(" Click en el enlace de login.");
     }
 
-    // =====================================================
-    // Paso 3: ingresar credenciales
-    // =====================================================
+    // Ingresar credenciales
     @When("el usuario ingresa en {string} el usuario {string} y en {string} la contraseña {string}")
     public void ingresarCredenciales(String userXpath, String usuario, String passXpath, String contrasena) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -56,9 +53,8 @@ public class LoginSteps {
         System.out.println("Credenciales ingresadas: " + usuario);
     }
 
-    // =====================================================
-    // Paso 4: hacer click en el botón Login
-    // =====================================================
+    // Hacer click en el botón Login
+
     @When("hace click en el boton de login {string}")
     public void clickBotonLogin(String xpath) {
         WebElement loginBtn = driver.findElement(By.xpath(xpath));
@@ -71,9 +67,8 @@ public class LoginSteps {
                 ));
     }
 
-    // =====================================================
-    // Paso 5: validar mensaje (éxito o error)
-    // =====================================================
+    // Validar mensaje
+
     @Then("Se deberia mostrar el campo {string} con el mensaje {string}")
     public void se_deberia_mostrar_el_campo_con_el_mensaje(String xpath, String mensajeEsperado) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
