@@ -92,10 +92,10 @@ public class VerDetallesCuentaSteps {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
+        String obj="Se muestra el mensaje esperado";
+        Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
         driver.quit();
         System.out.println(" Navegador cerrado correctamente.");
-        String obj="Navegador cerrado correctamente";
-        Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
+
     }
 }

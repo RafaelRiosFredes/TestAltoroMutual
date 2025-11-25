@@ -168,10 +168,11 @@ public class OfertaTarjetaSteps {
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
+            String obj="texto error";
+            Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
             driver.quit();
             System.out.println("Navegador cerrado correctamente.");
         }
-        String obj="texto error";
-        Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
+
     }
 }
