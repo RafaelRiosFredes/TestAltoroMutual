@@ -1,11 +1,13 @@
 package org.example.steps;
 
 import io.cucumber.java.en.*;
+import org.example.utils.Utility;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.support.ui.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import java.io.IOException;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,13 +18,15 @@ public class VerTransaccionesSteps {
 
 
     @Given("se abre el navegador en la página {string}")
-    public void abrirNavegador(String url) {
+    public void abrirNavegador(String url) throws IOException {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized", "--incognito", "--disable-popup-blocking");
         driver = new ChromeDriver(options);
         driver.get(url);
         System.out.println(" Página abierta: " + url);
+        String obj="Página abierta";
+        Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
     }
 
 

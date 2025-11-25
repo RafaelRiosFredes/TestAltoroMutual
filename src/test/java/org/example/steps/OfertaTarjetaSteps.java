@@ -25,6 +25,7 @@ public class OfertaTarjetaSteps {
         driver = new ChromeDriver(options);
         driver.get(url);
         System.out.println("Navegador abierto en: " + url);
+
     }
 
     @Given("el usuario hace click en {string} para ir a login")
