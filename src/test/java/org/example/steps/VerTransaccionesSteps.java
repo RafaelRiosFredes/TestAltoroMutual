@@ -25,7 +25,7 @@ public class VerTransaccionesSteps {
 
     @After
     public void tearDown() {
-        // No cerrar
+        // No cerramos el navegador
     }
 
     @Given("se abre el navegador en la página {string}")

@@ -54,7 +54,7 @@ public class LoginSteps {
         String usuario = ExcelUtils.getCellData(nroFila, 0);
         String contrasena = ExcelUtils.getCellData(nroFila, 1);
 
-        Thread.sleep(2000); // Espera antes de interactuar con los campos
+        Thread.sleep(2000); // tiempo de espera
 
         WebElement userField = driver.findElement(By.xpath(userXpath));
         userField.clear();
@@ -75,7 +75,7 @@ public class LoginSteps {
         driver.findElement(By.xpath(xpath)).click();
         System.out.println(" Click en el botón de login.");
 
-        // Esperamos un tiempo prudente para que cargue la siguiente página
+
         Thread.sleep(3000);
 
         String obj = "Click_en_boton_login";
@@ -86,7 +86,7 @@ public class LoginSteps {
     public void seDeberiaMostrarElCampoConElMensajeDeLaFila(String xpath, int nroFila) throws IOException, InterruptedException {
         String mensajeEsperado = ExcelUtils.getCellData(nroFila, 2);
 
-        Thread.sleep(2000); // Esperamos a que el mensaje aparezca
+        Thread.sleep(2000);
         WebElement mensajeElemento = driver.findElement(By.xpath(xpath));
 
         String texto = mensajeElemento.getText().trim();

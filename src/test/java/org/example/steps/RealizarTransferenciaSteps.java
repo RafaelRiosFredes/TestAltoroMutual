@@ -26,7 +26,7 @@ public class RealizarTransferenciaSteps {
 
     @After
     public void tearDown() {
-        // No cerrar driver
+        // No cerramos el navegador
     }
 
     @Given("se inicia navegador en la página {string}")

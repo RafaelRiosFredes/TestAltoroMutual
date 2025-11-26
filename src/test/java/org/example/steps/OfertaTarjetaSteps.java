@@ -25,7 +25,7 @@ public class OfertaTarjetaSteps {
 
     @After
     public void tearDown() {
-        // No cerramos
+        // No cerramos el navegador
     }
 
     @Given("el navegador está abierto en {string}")

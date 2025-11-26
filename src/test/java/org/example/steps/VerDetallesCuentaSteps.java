@@ -26,7 +26,7 @@ public class VerDetallesCuentaSteps {
 
     @After
     public void tearDown() {
-        // No cerramos
+        // No cerramos el navegador
     }
 
     @Given("se inicia un nuevo navegador en la página {string}")

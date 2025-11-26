@@ -23,7 +23,7 @@ public class Utility {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
 
-            // Configuraciones unificadas de todos tus steps
+            // Movimos los steps aca
             options.addArguments("--start-maximized");
             options.addArguments("--incognito");
             options.addArguments("--disable-popup-blocking");
@@ -35,7 +35,7 @@ public class Utility {
 
             driver = new ChromeDriver(options);
 
-            // Esto asegura que el navegador se cierre SOLO al final de toda la ejecución
+            // Shutdown Hook para cerrar el navegador para cuando cierre por completo
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (driver != null) {
                     driver.quit();
