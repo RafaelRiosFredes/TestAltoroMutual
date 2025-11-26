@@ -8,11 +8,8 @@ import io.cucumber.java.en.Then;
 import org.example.utils.ExcelUtils;
 import org.example.utils.Utility;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import static org.junit.Assert.assertTrue;
 
@@ -24,31 +21,28 @@ public class LoginSteps {
 
     @Before
     public void setup() {
-        // Usamos el driver único de Utility
         driver = Utility.getDriver();
-        // Limpiamos cookies para asegurar una sesión limpia sin cerrar la ventana
         driver.manage().deleteAllCookies();
     }
 
     @After
     public void tearDown() {
-        // NO cerramos el navegador aquí para reutilizarlo
+        // No cerramos el navegador para reutilizarlo
     }
 
     @Given("el navegador esta abierto en la pagina {string}")
     public void el_navegador_esta_abierto_en_la_pagina(String url) throws IOException, InterruptedException {
         ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         driver.get(url);
-        Thread.sleep(2000);
+        Thread.sleep(2000); // Espera fija
         String obj = "Acceder_AltoroMutual";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
     @Given("el usuario realiza click en {string} para dirigirse a la pagina de login")
-    public void el_usuario_realiza_click_en_para_dirigirse_a_la_pagina_de_login(String xpath) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement loginLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-        loginLink.click();
+    public void el_usuario_realiza_click_en_para_dirigirse_a_la_pagina_de_login(String xpath) throws IOException, InterruptedException {
+        Thread.sleep(2000); // Esperamos antes de buscar el elemento
+        driver.findElement(By.xpath(xpath)).click();
 
         System.out.println(" Click en el enlace de login.");
         String obj = "Click_en_el_enlace_de_login";
@@ -56,17 +50,17 @@ public class LoginSteps {
     }
 
     @When("el usuario ingresa en {string} y en {string} las credenciales de la fila {int}")
-    public void elUsuarioIngresaCredencialesDeLaFila(String userXpath, String passXpath, int nroFila) throws IOException {
+    public void elUsuarioIngresaCredencialesDeLaFila(String userXpath, String passXpath, int nroFila) throws IOException, InterruptedException {
         String usuario = ExcelUtils.getCellData(nroFila, 0);
         String contrasena = ExcelUtils.getCellData(nroFila, 1);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        Thread.sleep(2000); // Espera antes de interactuar con los campos
 
-        WebElement userField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(userXpath)));
+        WebElement userField = driver.findElement(By.xpath(userXpath));
         userField.clear();
         userField.sendKeys(usuario);
 
-        WebElement passField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(passXpath)));
+        WebElement passField = driver.findElement(By.xpath(passXpath));
         passField.clear();
         passField.sendKeys(contrasena);
 
@@ -76,28 +70,24 @@ public class LoginSteps {
     }
 
     @When("hace click en el boton de login {string}")
-    public void haceClickEnElBotonDeLogin(String xpath) throws IOException {
-        WebElement loginBtn = driver.findElement(By.xpath(xpath));
-        loginBtn.click();
+    public void haceClickEnElBotonDeLogin(String xpath) throws IOException, InterruptedException {
+        Thread.sleep(1000);
+        driver.findElement(By.xpath(xpath)).click();
         System.out.println(" Click en el botón de login.");
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.or(
-                        ExpectedConditions.urlContains("bank"),
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='_ctl0__ctl0_Content_Main_message']")),
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(text(),'Hello')]"))
-                ));
+        // Esperamos un tiempo prudente para que cargue la siguiente página
+        Thread.sleep(3000);
 
         String obj = "Click_en_boton_login";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
     @Then("Se deberia mostrar el campo {string} con el mensaje de la fila {int}")
-    public void seDeberiaMostrarElCampoConElMensajeDeLaFila(String xpath, int nroFila) throws IOException {
+    public void seDeberiaMostrarElCampoConElMensajeDeLaFila(String xpath, int nroFila) throws IOException, InterruptedException {
         String mensajeEsperado = ExcelUtils.getCellData(nroFila, 2);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement mensajeElemento = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+        Thread.sleep(2000); // Esperamos a que el mensaje aparezca
+        WebElement mensajeElemento = driver.findElement(By.xpath(xpath));
 
         String texto = mensajeElemento.getText().trim();
         if (texto.isEmpty()) {

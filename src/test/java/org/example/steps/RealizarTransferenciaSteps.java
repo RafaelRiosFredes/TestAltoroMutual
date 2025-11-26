@@ -5,11 +5,10 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
 import org.example.utils.Utility;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.*; // Aunque no usemos WebDriverWait, Select está aquí a veces
 import org.example.utils.ExcelUtils;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,17 +19,14 @@ public class RealizarTransferenciaSteps {
 
     @Before
     public void setup() throws IOException {
-        // Reutilizamos el driver
         driver = Utility.getDriver();
         driver.manage().deleteAllCookies();
-
-        // Cargamos el Excel aquí como estaba originalmente
         ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
     }
 
     @After
     public void tearDown() {
-        // NO cerramos el driver
+        // No cerrar driver
     }
 
     @Given("se inicia navegador en la página {string}")
@@ -43,14 +39,15 @@ public class RealizarTransferenciaSteps {
 
     @And("el usuario entra al login haciendo click en {string}")
     public void elUsuarioEntraAlLoginHaciendoClickEn(String xpath) throws InterruptedException, IOException {
-        driver.findElement(By.xpath(xpath)).click();
         Thread.sleep(2000);
+        driver.findElement(By.xpath(xpath)).click();
         String obj = "user entra a login";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
     @When("el usuario rellena los campos {string} y {string} con las credenciales {string} y {string}")
-    public void elUsuarioRellenaLosCamposYConLasCredencialesY(String userXpath, String passXpath, String username, String password) throws IOException {
+    public void elUsuarioRellenaLosCamposYConLasCredencialesY(String userXpath, String passXpath, String username, String password) throws IOException, InterruptedException {
+        Thread.sleep(2000);
         driver.findElement(By.xpath(userXpath)).click();
         driver.findElement(By.xpath(userXpath)).clear();
         driver.findElement(By.xpath(userXpath)).sendKeys(username);
@@ -64,6 +61,7 @@ public class RealizarTransferenciaSteps {
 
     @And("hace click al boton de login {string}")
     public void haceClickAlBotonDeLogin(String xpath) throws InterruptedException, IOException {
+        Thread.sleep(1000);
         driver.findElement(By.xpath(xpath)).click();
         Thread.sleep(2000);
         String obj = "Click_en el botón de login";
@@ -72,16 +70,16 @@ public class RealizarTransferenciaSteps {
 
     @When("el usuario hace click en {string} para dirigirse a la pagina de transferencias")
     public void el_usuario_realiza_click_en_para_dirigirse_a_la_pagina_de_transferencias(String xpath) throws InterruptedException, IOException {
-        driver.findElement(By.xpath(xpath)).click();
         Thread.sleep(2000);
+        driver.findElement(By.xpath(xpath)).click();
         String obj = "Click pagina transferencia";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
     @And("el usuario selecciona la cuenta de origen {string} en el menú desplegable {string}")
-    public void elUsuarioSeleccionaLaCuentaDeOrigenEnElMenúDesplegable(String cuenta, String xpath) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    public void elUsuarioSeleccionaLaCuentaDeOrigenEnElMenúDesplegable(String cuenta, String xpath) throws IOException, InterruptedException {
+        Thread.sleep(2000);
+        WebElement selectElement = driver.findElement(By.xpath(xpath));
         Select select = new Select(selectElement);
         select.selectByVisibleText(cuenta);
         System.out.println(" Cuenta seleccionada: " + cuenta);
@@ -90,9 +88,9 @@ public class RealizarTransferenciaSteps {
     }
 
     @And("selecciona la cuenta de destino {string} en el menú desplegable {string}")
-    public void seleccionaLaCuentaDeDestinoEnElMenúDesplegable(String cuenta, String xpath) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    public void seleccionaLaCuentaDeDestinoEnElMenúDesplegable(String cuenta, String xpath) throws IOException, InterruptedException {
+        Thread.sleep(2000);
+        WebElement selectElement = driver.findElement(By.xpath(xpath));
         Select select = new Select(selectElement);
         select.selectByVisibleText(cuenta);
         System.out.println(" Cuenta seleccionada: " + cuenta);
@@ -101,7 +99,8 @@ public class RealizarTransferenciaSteps {
     }
 
     @And("ingresa el monto a transferir {string} en el campo {string}")
-    public void ingresaElMontoATransferirEnElCampo(String monto, String xpath) throws IOException {
+    public void ingresaElMontoATransferirEnElCampo(String monto, String xpath) throws IOException, InterruptedException {
+        Thread.sleep(1000);
         driver.findElement(By.xpath(xpath)).clear();
         driver.findElement(By.xpath(xpath)).sendKeys(monto);
         String obj = "ingresa el monto a transferir";
@@ -110,16 +109,16 @@ public class RealizarTransferenciaSteps {
 
     @And("hace click en el boton {string}")
     public void haceClickEnElBoton(String xpath) throws InterruptedException, IOException {
-        driver.findElement(By.xpath(xpath)).click();
         Thread.sleep(1000);
+        driver.findElement(By.xpath(xpath)).click();
         String obj = "hace click en el boton transferir";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
     @Then("Se muestra el campo {string} con el mensaje {string}")
-    public void seMuestraElCampoConElMensaje(String msgXpath, String mensaje) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement msg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(msgXpath)));
+    public void seMuestraElCampoConElMensaje(String msgXpath, String mensaje) throws IOException, InterruptedException {
+        Thread.sleep(3000); // Esperar a que se procese la transferencia
+        WebElement msg = driver.findElement(By.xpath(msgXpath));
         String texto = msg.getText().trim();
 
         assertTrue("Mensaje actual: [" + texto + "]", texto.contains(mensaje));
@@ -128,11 +127,14 @@ public class RealizarTransferenciaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
+    // --- Métodos Data Driven (Excel) con Thread.sleep ---
+
     @When("el usuario rellena los campos {string} y {string} con los datos de la fila {int}")
-    public void elUsuarioRellenaLosCamposConLosDatosDeLaFila(String userXpath, String passXpath, int nroFila) throws IOException {
+    public void elUsuarioRellenaLosCamposConLosDatosDeLaFila(String userXpath, String passXpath, int nroFila) throws IOException, InterruptedException {
         String username = ExcelUtils.getCellData(nroFila, 0);
         String password = ExcelUtils.getCellData(nroFila, 1);
 
+        Thread.sleep(2000);
         driver.findElement(By.xpath(userXpath)).click();
         driver.findElement(By.xpath(userXpath)).clear();
         driver.findElement(By.xpath(userXpath)).sendKeys(username);
@@ -146,10 +148,11 @@ public class RealizarTransferenciaSteps {
     }
 
     @And("el usuario selecciona la cuenta de origen en {string} con los datos de la fila {int}")
-    public void elUsuarioSeleccionaLaCuentaDeOrigenConDatosDeLaFila(String xpath, int nroFila) throws IOException {
+    public void elUsuarioSeleccionaLaCuentaDeOrigenConDatosDeLaFila(String xpath, int nroFila) throws IOException, InterruptedException {
         String cuentaOrigen = ExcelUtils.getCellData(nroFila, 2);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+
+        Thread.sleep(2000);
+        WebElement selectElement = driver.findElement(By.xpath(xpath));
         Select select = new Select(selectElement);
         select.selectByVisibleText(cuentaOrigen);
 
@@ -159,10 +162,11 @@ public class RealizarTransferenciaSteps {
     }
 
     @And("selecciona la cuenta de destino en {string} con los datos de la fila {int}")
-    public void seleccionaLaCuentaDeDestinoConDatosDeLaFila(String xpath, int nroFila) throws IOException {
+    public void seleccionaLaCuentaDeDestinoConDatosDeLaFila(String xpath, int nroFila) throws IOException, InterruptedException {
         String cuentaDestino = ExcelUtils.getCellData(nroFila, 3);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+
+        Thread.sleep(2000);
+        WebElement selectElement = driver.findElement(By.xpath(xpath));
         Select select = new Select(selectElement);
         select.selectByVisibleText(cuentaDestino);
 
@@ -172,8 +176,10 @@ public class RealizarTransferenciaSteps {
     }
 
     @And("ingresa el monto a transferir en el campo {string} con los datos de la fila {int}")
-    public void ingresaElMontoATransferirEnElCampoConDatosDeLaFila(String xpath, int nroFila) throws IOException {
+    public void ingresaElMontoATransferirEnElCampoConDatosDeLaFila(String xpath, int nroFila) throws IOException, InterruptedException {
         String monto = ExcelUtils.getCellData(nroFila, 4);
+
+        Thread.sleep(1000);
         WebElement amountField = driver.findElement(By.xpath(xpath));
         amountField.clear();
         amountField.sendKeys(monto);
@@ -183,10 +189,11 @@ public class RealizarTransferenciaSteps {
     }
 
     @Then("Se muestra el campo {string} con el mensaje de la fila {int}")
-    public void seMuestraElCampoConElMensajeDeLaFila(String msgXpath, int nroFila) throws IOException {
+    public void seMuestraElCampoConElMensajeDeLaFila(String msgXpath, int nroFila) throws IOException, InterruptedException {
         String mensajeEsperado = ExcelUtils.getCellData(nroFila, 5);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement msg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(msgXpath)));
+
+        Thread.sleep(3000);
+        WebElement msg = driver.findElement(By.xpath(msgXpath));
         String texto = msg.getText().trim();
 
         assertTrue("Mensaje actual: [" + texto + "]", texto.contains(mensajeEsperado));

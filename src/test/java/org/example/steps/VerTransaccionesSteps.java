@@ -6,10 +6,8 @@ import io.cucumber.java.en.*;
 import org.example.utils.ExcelUtils;
 import org.example.utils.Utility;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.*;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,18 +19,17 @@ public class VerTransaccionesSteps {
 
     @Before
     public void setup() {
-        // MODIFICADO: Usamos el driver único de Utility
         driver = Utility.getDriver();
         driver.manage().deleteAllCookies();
     }
 
     @After
     public void tearDown() {
-        // MODIFICADO: No cerramos el navegador aquí
+        // No cerrar
     }
 
     @Given("se abre el navegador en la página {string}")
-    public void abrirNavegador(String url) throws IOException {
+    public void abrirNavegador(String url) throws IOException, InterruptedException {
         try {
             ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         } catch (Exception e) {
@@ -40,15 +37,16 @@ public class VerTransaccionesSteps {
         }
 
         driver.get(url);
+        Thread.sleep(2000);
         System.out.println(" Página abierta: " + url);
         String obj = "Página_abierta_transacciones";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
     @Given("el usuario accede al login desde VerTransacciones haciendo click en {string}")
-    public void irAlLoginVerTransacciones(String xpath) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement loginLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+    public void irAlLoginVerTransacciones(String xpath) throws IOException, InterruptedException {
+        Thread.sleep(2000);
+        WebElement loginLink = driver.findElement(By.xpath(xpath));
         loginLink.click();
         System.out.println(" Click en enlace de login (VerTransacciones).");
         String obj = "Click_login_link_transacciones";
@@ -56,13 +54,13 @@ public class VerTransaccionesSteps {
     }
 
     @When("en VerTransacciones el usuario completa {string} y {string} con las credenciales de la fila {int}")
-    public void ingresarCredencialesVerTransacciones(String userXpath, String passXpath, int nroFila) throws IOException {
+    public void ingresarCredencialesVerTransacciones(String userXpath, String passXpath, int nroFila) throws IOException, InterruptedException {
         String usuario = ExcelUtils.getCellData(nroFila, 0);
         String contrasena = ExcelUtils.getCellData(nroFila, 1);
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(userXpath))).sendKeys(usuario);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(passXpath))).sendKeys(contrasena);
+        Thread.sleep(2000);
+        driver.findElement(By.xpath(userXpath)).sendKeys(usuario);
+        driver.findElement(By.xpath(passXpath)).sendKeys(contrasena);
 
         System.out.println("Credenciales ingresadas (Fila " + nroFila + ")");
         String obj = "Credenciales_ingresadas_transacciones_" + nroFila;
@@ -70,7 +68,8 @@ public class VerTransaccionesSteps {
     }
 
     @When("presiona el botón de login en VerTransacciones {string}")
-    public void clickBotonLoginVerTransacciones(String xpath) throws IOException {
+    public void clickBotonLoginVerTransacciones(String xpath) throws IOException, InterruptedException {
+        Thread.sleep(1000);
         driver.findElement(By.xpath(xpath)).click();
         System.out.println(" Click en botón Login (VerTransacciones).");
         String obj = "Click_boton_login_transacciones";
@@ -78,9 +77,9 @@ public class VerTransaccionesSteps {
     }
 
     @When("el usuario realiza click en {string} para acceder a la seccion de transacciones recientes")
-    public void accederASeccionTransacciones(String xpath) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+    public void accederASeccionTransacciones(String xpath) throws IOException, InterruptedException {
+        Thread.sleep(2000);
+        WebElement link = driver.findElement(By.xpath(xpath));
         link.click();
         System.out.println(" Click en 'View Recent Transactions'.");
         String obj = "Click_view_recent_transactions";
@@ -88,9 +87,9 @@ public class VerTransaccionesSteps {
     }
 
     @Then("Se deberia mostrar el campo {string} con el historial de transacciones")
-    public void validarHistorial(String xpath) throws IOException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement tabla = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    public void validarHistorial(String xpath) throws IOException, InterruptedException {
+        Thread.sleep(2000);
+        WebElement tabla = driver.findElement(By.xpath(xpath));
 
         assertTrue(tabla.isDisplayed(), " No se visualizó la tabla de transacciones.");
         System.out.println(" Se visualiza correctamente el historial de transacciones.");
