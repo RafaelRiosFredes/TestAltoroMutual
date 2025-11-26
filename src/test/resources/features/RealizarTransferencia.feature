@@ -1,6 +1,6 @@
 Feature: Realizar transferencias entre cuentas -Admin
 
-  # Usamos datos de un Excel (dataTransferFondos.xlsx) mediante NroFila
+
   Scenario Outline: Realizar una transferencia entre cuentas usando datos desde Excel
     Given se inicia navegador en la página "https://demo.testfire.net/"
     And el usuario entra al login haciendo click en "//*[@id='LoginLink']/font"

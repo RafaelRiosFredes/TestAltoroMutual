@@ -15,10 +15,10 @@ import java.util.Date;
 
 public class Utility {
 
- // Inicia el navegador solo una vez, aplica configuraciones, y luego lo cierra correctamente al final.
+
 
     private static WebDriver driver;
-    private static final int WAIT_BEFORE_CLOSE = 5000; // Tiempo en milisegundos (5 segundos)
+    private static final int WAIT_BEFORE_CLOSE = 5000;
 
     public static WebDriver getDriver() {
         if (driver == null) {
@@ -39,7 +39,7 @@ public class Utility {
     public static void closeDriver() {
         if (driver != null) {
             try {
-                // Esperar unos segundos antes de cerrar el navegador
+
                 System.out.println("⏳ Esperando " + (WAIT_BEFORE_CLOSE / 10000) + " segundos antes de cerrar...");
                 Thread.sleep(WAIT_BEFORE_CLOSE);
             } catch (InterruptedException e) {

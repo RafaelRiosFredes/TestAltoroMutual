@@ -16,10 +16,7 @@ public class ExcelUtils {
     private static XSSFSheet excelWSheet;
     private static final DataFormatter formatter = new DataFormatter();
 
-    /**
-     * Abre el archivo Excel y selecciona la hoja indicada.
-     * Debes llamarlo una vez antes de leer celdas.
-     */
+
     public static void setExcelFileSheet(String filePath, String sheetName) throws IOException {
         FileInputStream excelFile = new FileInputStream(filePath);
         excelWBook = new XSSFWorkbook(excelFile);
@@ -30,9 +27,6 @@ public class ExcelUtils {
         }
     }
 
-    /**
-     * Lee el valor formateado de una celda.
-     */
     public static String getCellData(int rowNum, int colNum) {
         if (excelWSheet == null) {
             throw new IllegalStateException("Debe llamarse primero a setExcelFileSheet().");
@@ -51,10 +45,8 @@ public class ExcelUtils {
         return formatter.formatCellValue(cell);
     }
 
-    /**
-     * Opcional: escribe un valor en una celda y guarda el archivo.
-     * (Por si quisieras usar Excel también para registrar resultados).
-     */
+
+
     public static void setCellData(String value, int rowNum, int colNum, String filePath) throws IOException {
         if (excelWSheet == null) {
             throw new IllegalStateException("Debe llamarse primero a setExcelFileSheet().");

@@ -42,7 +42,7 @@ public class VerTransaccionesSteps {
 
     @Given("se abre el navegador en la página {string}")
     public void abrirNavegador(String url) throws IOException {
-        // --- IMPORTANTE: Cargamos la Hoja5 aquí ---
+
         try {
             ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class VerTransaccionesSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- LOGIN CON CREDENCIALES DE EXCEL (Col 0 y 1) ---
+
     @When("en VerTransacciones el usuario completa {string} y {string} con las credenciales de la fila {int}")
     public void ingresarCredencialesVerTransacciones(String userXpath, String passXpath, int nroFila) throws IOException {
         String usuario = ExcelUtils.getCellData(nroFila, 0);
@@ -92,10 +92,9 @@ public class VerTransaccionesSteps {
     @When("el usuario realiza click en {string} para acceder a la seccion de transacciones recientes")
     public void accederASeccionTransacciones(String xpath) throws IOException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        // --- CORRECCIÓN AQUÍ ---
-        // Usamos directamente By.xpath(xpath) ya que recibimos un String correcto desde el feature.
+
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-        // -----------------------
+
         link.click();
         System.out.println(" Click en 'View Recent Transactions'.");
         String obj = "Click_view_recent_transactions";

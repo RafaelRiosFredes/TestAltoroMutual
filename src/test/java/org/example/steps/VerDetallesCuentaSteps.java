@@ -42,7 +42,7 @@ public class VerDetallesCuentaSteps {
 
     @Given("se inicia un nuevo navegador en la página {string}")
     public void abrirNavegadorEnPagina(String url) throws IOException {
-        // --- IMPORTANTE: Cargamos la Hoja4 aquí para asegurar que es la correcta ---
+
         try {
             ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class VerDetallesCuentaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- LOGIN CON DATOS DE EXCEL (Col 0 y 1) ---
+
     @When("el usuario completa los campos {string} y {string} con las credenciales de la fila {int}")
     public void ingresarCredencialesCuenta(String userXpath, String passXpath, int nroFila) throws IOException {
         String usuario = ExcelUtils.getCellData(nroFila, 0);
@@ -88,7 +88,7 @@ public class VerDetallesCuentaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- SELECCIONAR CUENTA CON DATOS DE EXCEL (Col 2) ---
+
     @When("el usuario selecciona la cuenta de la fila {int} en el menú desplegable {string}")
     public void seleccionarCuenta(int nroFila, String xpathSelect) throws IOException {
         String cuenta = ExcelUtils.getCellData(nroFila, 2);
@@ -111,7 +111,7 @@ public class VerDetallesCuentaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- VALIDAR MENSAJE CON DATOS DE EXCEL (Col 3) ---
+
     @Then("Se valida que se muestra el campo {string} con el mensaje de la fila {int}")
     public void validarMensaje(String xpath, int nroFila) throws IOException {
         String mensajeEsperado = ExcelUtils.getCellData(nroFila, 3);

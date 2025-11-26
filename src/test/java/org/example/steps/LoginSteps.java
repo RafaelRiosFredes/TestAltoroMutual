@@ -42,7 +42,7 @@ public class LoginSteps {
         driver.manage().window().maximize();
         driver.manage().deleteAllCookies();
 
-        // NOTA: No cargamos el Excel aquí para evitar conflictos con Transferencias.
+        // No cargamos el Excel aquí para evitar conflictos con Transferencias.
         // Lo haremos en el primer @Given.
     }
 
@@ -55,9 +55,8 @@ public class LoginSteps {
 
     @Given("el navegador esta abierto en la pagina {string}")
     public void el_navegador_esta_abierto_en_la_pagina(String url) throws IOException, InterruptedException {
-        // --- CORRECCIÓN IMPORTANTE ---
-        // Forzamos la carga de la Hoja2 aquí. Así, aunque se haya ejecutado antes
-        // el código de Transferencias (Hoja1), aquí lo sobrescribimos a Hoja2.
+
+
         ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         // -----------------------------
 

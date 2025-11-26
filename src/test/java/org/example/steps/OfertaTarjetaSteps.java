@@ -24,7 +24,7 @@ public class OfertaTarjetaSteps {
     private static final String EXCEL_PATH = "src/test/resources/testData/dataTransferFondos.xlsx";
     private static final String EXCEL_SHEET = "Hoja3";
 
-    // --- SETUP Y TEARDOWN ---
+
     @Before
     public void setup() {
         WebDriverManager.chromedriver().setup();
@@ -43,11 +43,11 @@ public class OfertaTarjetaSteps {
         }
     }
 
-    // --- PASOS (STEPS) ---
+
 
     @Given("el navegador está abierto en {string}")
     public void abrirNavegadorEn(String url) throws IOException {
-        // IMPORTANTE: Cargamos la Hoja3 aquí, al inicio de la prueba
+        //  Cargamos la Hoja3 aquí, al inicio de la prueba
         try {
             ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class OfertaTarjetaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- LOGIN CON EXCEL (Columna 0 y 1) ---
+    //
     @Given("escribe el usuario en {string} con datos de la fila {int}")
     public void escribirUsuario(String xpath, int nroFila) throws IOException {
         String usuario = ExcelUtils.getCellData(nroFila, 0); // Columna 0: Usuario Login
@@ -86,7 +86,7 @@ public class OfertaTarjetaSteps {
 
     @Given("escribe la clave en {string} con datos de la fila {int}")
     public void escribirClave(String xpath, int nroFila) throws IOException {
-        String clave = ExcelUtils.getCellData(nroFila, 1); // Columna 1: Clave Login
+        String clave = ExcelUtils.getCellData(nroFila, 1);
 
         WebElement pass = new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
@@ -107,7 +107,7 @@ public class OfertaTarjetaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- FLUJO DE TARJETA ---
+
 
     @When("hace click en el enlace {string}")
     public void clickEnlace(String xpath) throws IOException {
@@ -131,7 +131,7 @@ public class OfertaTarjetaSteps {
 
     @When("escribe la clave de confirmación en {string} con datos de la fila {int}")
     public void escribirClaveConfirmacion(String xpath, int nroFila) throws IOException {
-        String claveConf = ExcelUtils.getCellData(nroFila, 2); // Columna 2: Clave Confirmación
+        String claveConf = ExcelUtils.getCellData(nroFila, 2);
 
         WebElement passConfirm = new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
@@ -155,7 +155,7 @@ public class OfertaTarjetaSteps {
     // --- VALIDACIÓN FINAL (Columna 3) ---
     @Then("debería ver en {string} el texto de la fila {int}")
     public void deberiaVerMensaje(String xpath, int nroFila) throws IOException {
-        String esperado = ExcelUtils.getCellData(nroFila, 3); // Columna 3: Mensaje esperado
+        String esperado = ExcelUtils.getCellData(nroFila, 3);
 
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -168,7 +168,7 @@ public class OfertaTarjetaSteps {
                     texto.contains(esperado));
 
         } catch (TimeoutException e) {
-            // Fallback: buscar en el body si el elemento específico falla
+
             WebElement body = driver.findElement(By.tagName("body"));
             String textoBody = body.getText().trim();
 

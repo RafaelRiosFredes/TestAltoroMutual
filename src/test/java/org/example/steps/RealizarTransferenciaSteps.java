@@ -149,8 +149,8 @@ public class RealizarTransferenciaSteps {
 
     @When("el usuario rellena los campos {string} y {string} con los datos de la fila {int}")
     public void elUsuarioRellenaLosCamposConLosDatosDeLaFila(String userXpath, String passXpath, int nroFila) throws IOException {
-        String username = ExcelUtils.getCellData(nroFila, 0); // Columna usuario
-        String password = ExcelUtils.getCellData(nroFila, 1); // Columna password
+        String username = ExcelUtils.getCellData(nroFila, 0);
+        String password = ExcelUtils.getCellData(nroFila, 1);
 
         driver.findElement(By.xpath(userXpath)).click();
         driver.findElement(By.xpath(userXpath)).clear();
@@ -166,7 +166,7 @@ public class RealizarTransferenciaSteps {
 
     @And("el usuario selecciona la cuenta de origen en {string} con los datos de la fila {int}")
     public void elUsuarioSeleccionaLaCuentaDeOrigenConDatosDeLaFila(String xpath, int nroFila) throws IOException {
-        String cuentaOrigen = ExcelUtils.getCellData(nroFila, 2); // Columna fromAccount
+        String cuentaOrigen = ExcelUtils.getCellData(nroFila, 2);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
@@ -180,7 +180,7 @@ public class RealizarTransferenciaSteps {
 
     @And("selecciona la cuenta de destino en {string} con los datos de la fila {int}")
     public void seleccionaLaCuentaDeDestinoConDatosDeLaFila(String xpath, int nroFila) throws IOException {
-        String cuentaDestino = ExcelUtils.getCellData(nroFila, 3); // Columna toAccount
+        String cuentaDestino = ExcelUtils.getCellData(nroFila, 3);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
@@ -194,7 +194,7 @@ public class RealizarTransferenciaSteps {
 
     @And("ingresa el monto a transferir en el campo {string} con los datos de la fila {int}")
     public void ingresaElMontoATransferirEnElCampoConDatosDeLaFila(String xpath, int nroFila) throws IOException {
-        String monto = ExcelUtils.getCellData(nroFila, 4); // Columna amount
+        String monto = ExcelUtils.getCellData(nroFila, 4);
 
         WebElement amountField = driver.findElement(By.xpath(xpath));
         amountField.clear();
@@ -207,7 +207,7 @@ public class RealizarTransferenciaSteps {
 
     @Then("Se muestra el campo {string} con el mensaje de la fila {int}")
     public void seMuestraElCampoConElMensajeDeLaFila(String msgXpath, int nroFila) throws IOException {
-        String mensajeEsperado = ExcelUtils.getCellData(nroFila, 5); // Columna mensaje
+        String mensajeEsperado = ExcelUtils.getCellData(nroFila, 5);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement msg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(msgXpath)));
