@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.example.utils.ExcelUtils;
+
 
 import java.io.IOException;
 import java.time.Duration;
@@ -17,9 +19,12 @@ import static org.junit.Assert.assertTrue;
 
 public class RealizarTransferenciaSteps {
     static WebDriver driver;
+    private static final String EXCEL_PATH = "src/test/resources/testData/dataTransferFondos.xlsx";
+    private static final String EXCEL_SHEET = "Hoja1";
+
 
     @Before
-    public void setup(){
+    public void setup() throws IOException {
         WebDriverManager.chromedriver().setup();
 
         ChromeOptions options = new ChromeOptions();
@@ -33,6 +38,9 @@ public class RealizarTransferenciaSteps {
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.manage().deleteAllCookies();
+
+        //cargar archivo Excel de datos para transferencias
+        ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
     }
 
     @After
@@ -49,7 +57,7 @@ public class RealizarTransferenciaSteps {
         String obj="acceso altoro mutual";
         Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
     }
-   
+
     @And("el usuario entra al login haciendo click en {string}")
     public void elUsuarioEntraAlLoginHaciendoClickEn(String xpath) throws InterruptedException, IOException {
         driver.findElement(By.xpath(xpath)).click();
@@ -137,6 +145,79 @@ public class RealizarTransferenciaSteps {
         System.out.println(" Se visualiza correctamente la transferencia realizada");
         String obj="Se visualiza correctamente la transferencia realizada";
         Utility.captureScreenShot(driver,"evidencias\\"+obj+" "+Utility.GetTimeStampValue()+".png");
+    }
+
+    @When("el usuario rellena los campos {string} y {string} con los datos de la fila {int}")
+    public void elUsuarioRellenaLosCamposConLosDatosDeLaFila(String userXpath, String passXpath, int nroFila) throws IOException {
+        String username = ExcelUtils.getCellData(nroFila, 0); // Columna usuario
+        String password = ExcelUtils.getCellData(nroFila, 1); // Columna password
+
+        driver.findElement(By.xpath(userXpath)).click();
+        driver.findElement(By.xpath(userXpath)).clear();
+        driver.findElement(By.xpath(userXpath)).sendKeys(username);
+
+        driver.findElement(By.xpath(passXpath)).click();
+        driver.findElement(By.xpath(passXpath)).clear();
+        driver.findElement(By.xpath(passXpath)).sendKeys(password);
+
+        String obj = "usuario rellena campos desde Excel fila " + nroFila;
+        Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
+    }
+
+    @And("el usuario selecciona la cuenta de origen en {string} con los datos de la fila {int}")
+    public void elUsuarioSeleccionaLaCuentaDeOrigenConDatosDeLaFila(String xpath, int nroFila) throws IOException {
+        String cuentaOrigen = ExcelUtils.getCellData(nroFila, 2); // Columna fromAccount
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+        Select select = new Select(selectElement);
+        select.selectByVisibleText(cuentaOrigen);
+
+        System.out.println("Cuenta de origen seleccionada (fila " + nroFila + "): " + cuentaOrigen);
+        String obj = "cuenta origen fila " + nroFila;
+        Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
+    }
+
+    @And("selecciona la cuenta de destino en {string} con los datos de la fila {int}")
+    public void seleccionaLaCuentaDeDestinoConDatosDeLaFila(String xpath, int nroFila) throws IOException {
+        String cuentaDestino = ExcelUtils.getCellData(nroFila, 3); // Columna toAccount
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+        Select select = new Select(selectElement);
+        select.selectByVisibleText(cuentaDestino);
+
+        System.out.println("Cuenta de destino seleccionada (fila " + nroFila + "): " + cuentaDestino);
+        String obj = "cuenta destino fila " + nroFila;
+        Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
+    }
+
+    @And("ingresa el monto a transferir en el campo {string} con los datos de la fila {int}")
+    public void ingresaElMontoATransferirEnElCampoConDatosDeLaFila(String xpath, int nroFila) throws IOException {
+        String monto = ExcelUtils.getCellData(nroFila, 4); // Columna amount
+
+        WebElement amountField = driver.findElement(By.xpath(xpath));
+        amountField.clear();
+        amountField.sendKeys(monto);
+
+        String obj = "monto transferencia fila " + nroFila;
+        Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
+    }
+
+
+    @Then("Se muestra el campo {string} con el mensaje de la fila {int}")
+    public void seMuestraElCampoConElMensajeDeLaFila(String msgXpath, int nroFila) throws IOException {
+        String mensajeEsperado = ExcelUtils.getCellData(nroFila, 5); // Columna mensaje
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement msg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(msgXpath)));
+        String texto = msg.getText().trim();
+
+        assertTrue("Mensaje actual: [" + texto + "]", texto.contains(mensajeEsperado));
+        System.out.println("Se visualiza correctamente la transferencia fila " + nroFila);
+
+        String obj = "mensaje transferencia fila " + nroFila;
+        Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
 
