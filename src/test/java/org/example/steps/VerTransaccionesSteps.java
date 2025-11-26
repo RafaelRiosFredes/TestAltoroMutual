@@ -6,9 +6,7 @@ import io.cucumber.java.en.*;
 import org.example.utils.ExcelUtils;
 import org.example.utils.Utility;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.support.ui.*;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -18,37 +16,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class VerTransaccionesSteps {
 
     static WebDriver driver;
-    // Definimos la ruta y usamos "Hoja5" para esta prueba
     private static final String EXCEL_PATH = "src/test/resources/testData/dataTransferFondos.xlsx";
     private static final String EXCEL_SHEET = "Hoja5";
 
     @Before
     public void setup() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized", "--incognito", "--disable-popup-blocking");
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
+        // MODIFICADO: Usamos el driver único de Utility
+        driver = Utility.getDriver();
         driver.manage().deleteAllCookies();
     }
 
     @After
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-            System.out.println(" Navegador cerrado correctamente.");
-        }
+        // MODIFICADO: No cerramos el navegador aquí
     }
 
     @Given("se abre el navegador en la página {string}")
     public void abrirNavegador(String url) throws IOException {
-
         try {
             ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         } catch (Exception e) {
             System.err.println("Error cargando Excel: " + e.getMessage());
         }
-        // ------------------------------------------
 
         driver.get(url);
         System.out.println(" Página abierta: " + url);
@@ -65,7 +54,6 @@ public class VerTransaccionesSteps {
         String obj = "Click_login_link_transacciones";
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
-
 
     @When("en VerTransacciones el usuario completa {string} y {string} con las credenciales de la fila {int}")
     public void ingresarCredencialesVerTransacciones(String userXpath, String passXpath, int nroFila) throws IOException {
@@ -92,9 +80,7 @@ public class VerTransaccionesSteps {
     @When("el usuario realiza click en {string} para acceder a la seccion de transacciones recientes")
     public void accederASeccionTransacciones(String xpath) throws IOException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-
         link.click();
         System.out.println(" Click en 'View Recent Transactions'.");
         String obj = "Click_view_recent_transactions";

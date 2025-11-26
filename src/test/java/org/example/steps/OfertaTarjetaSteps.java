@@ -3,12 +3,9 @@ package org.example.steps;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.example.utils.ExcelUtils;
 import org.example.utils.Utility;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,34 +17,22 @@ import static org.junit.Assert.assertTrue;
 public class OfertaTarjetaSteps {
 
     static WebDriver driver;
-    // Definimos la ruta y usamos "Hoja3" para esta prueba específica
     private static final String EXCEL_PATH = "src/test/resources/testData/dataTransferFondos.xlsx";
     private static final String EXCEL_SHEET = "Hoja3";
 
-
     @Before
     public void setup() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized", "--incognito", "--disable-popup-blocking");
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
+        driver = Utility.getDriver();
         driver.manage().deleteAllCookies();
     }
 
     @After
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-            System.out.println("Navegador cerrado correctamente.");
-        }
+        // NO cerramos el driver
     }
-
-
 
     @Given("el navegador está abierto en {string}")
     public void abrirNavegadorEn(String url) throws IOException {
-        //  Cargamos la Hoja3 aquí, al inicio de la prueba
         try {
             ExcelUtils.setExcelFileSheet(EXCEL_PATH, EXCEL_SHEET);
         } catch (Exception e) {
@@ -69,10 +54,9 @@ public class OfertaTarjetaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    //
     @Given("escribe el usuario en {string} con datos de la fila {int}")
     public void escribirUsuario(String xpath, int nroFila) throws IOException {
-        String usuario = ExcelUtils.getCellData(nroFila, 0); // Columna 0: Usuario Login
+        String usuario = ExcelUtils.getCellData(nroFila, 0);
 
         WebElement user = new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
@@ -107,11 +91,8 @@ public class OfertaTarjetaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-
-
     @When("hace click en el enlace {string}")
     public void clickEnlace(String xpath) throws IOException {
-        // Manejo de pestañas por si acaso
         String originalWindow = driver.getWindowHandle();
         for (String windowHandle : driver.getWindowHandles()) {
             if (!windowHandle.equals(originalWindow)) {
@@ -152,7 +133,6 @@ public class OfertaTarjetaSteps {
         Utility.captureScreenShot(driver, "evidencias\\" + obj + " " + Utility.GetTimeStampValue() + ".png");
     }
 
-    // --- VALIDACIÓN FINAL (Columna 3) ---
     @Then("debería ver en {string} el texto de la fila {int}")
     public void deberiaVerMensaje(String xpath, int nroFila) throws IOException {
         String esperado = ExcelUtils.getCellData(nroFila, 3);
@@ -168,7 +148,6 @@ public class OfertaTarjetaSteps {
                     texto.contains(esperado));
 
         } catch (TimeoutException e) {
-
             WebElement body = driver.findElement(By.tagName("body"));
             String textoBody = body.getText().trim();
 

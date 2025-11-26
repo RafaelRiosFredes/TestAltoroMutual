@@ -15,58 +15,59 @@ import java.util.Date;
 
 public class Utility {
 
-
-
     private static WebDriver driver;
-    private static final int WAIT_BEFORE_CLOSE = 5000;
 
+    // Patrón Singleton: Solo crea el driver si no existe
     public static WebDriver getDriver() {
         if (driver == null) {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
+
+            // Configuraciones unificadas de todos tus steps
             options.addArguments("--start-maximized");
             options.addArguments("--incognito");
             options.addArguments("--disable-popup-blocking");
             options.addArguments("--disable-notifications");
             options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--disable-save-password-bubble");
+            options.addArguments("--no-default-browser-check");
+            options.addArguments("--disable-infobars");
 
             driver = new ChromeDriver(options);
+
+            // Esto asegura que el navegador se cierre SOLO al final de toda la ejecución
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (driver != null) {
+                    driver.quit();
+                    driver = null;
+                    System.out.println(" Navegador cerrado por ShutdownHook.");
+                }
+            }));
+
             System.out.println(" Navegador iniciado correctamente (Utility)");
         }
         return driver;
     }
 
+    // Ya no llamaremos a esto manualmente en cada test
     public static void closeDriver() {
         if (driver != null) {
-            try {
-
-                System.out.println("⏳ Esperando " + (WAIT_BEFORE_CLOSE / 10000) + " segundos antes de cerrar...");
-                Thread.sleep(WAIT_BEFORE_CLOSE);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-
             driver.quit();
             driver = null;
-            System.out.println(" Navegador cerrado correctamente (Utility)");
         }
     }
 
-    public static void captureScreenShot (WebDriver webDriver, String filePath)throws IOException
-    {
-        TakesScreenshot screenshot=((TakesScreenshot) webDriver);
+    public static void captureScreenShot(WebDriver webDriver, String filePath) throws IOException {
+        TakesScreenshot screenshot = ((TakesScreenshot) webDriver);
         File screenFile = screenshot.getScreenshotAs(OutputType.FILE);
         File DestinoFile = new File(filePath);
         FileUtils.copyFile(screenFile, DestinoFile);
     }
 
-    public static String GetTimeStampValue () throws IOException
-    {
+    public static String GetTimeStampValue() {
         Calendar cal = Calendar.getInstance();
         Date time = cal.getTime();
         String timestamp = time.toString();
-        String systime= timestamp.replace(":", "-");
-        return systime;
+        return timestamp.replace(":", "-");
     }
 }
-
